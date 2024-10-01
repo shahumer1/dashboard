@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>POS Dashboard</title>
+    
+    <!-- Bootstrap CSS -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+        crossorigin="anonymous"
+    />
+    <style>
+        .current-sale {
+    background-color: #f8f9fa; /* Light gray for contrast */
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.categories {
+    margin-bottom: 20px;
+}
+
+.product-button {
+    width: 100%; /* Make buttons full width */
+}
+
+.card {
+    transition: transform 0.2s; /* Add hover effect */
+}
+
+.card:hover {
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+    </style>
+</head>
+
+<body>
+    <header>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                >
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item"><a class="nav-link active" href="allcos.html">ALL CUSTOMER</a></li>
+                        <li class="nav-item"><a class="nav-link" href="customer.html">NEW CUSTOMER</a></li>
+                        <li class="nav-item"><a class="nav-link" href="index.html">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="vender.html">Vender</a></li>
+                        <li class="nav-item"><a class="nav-link" href="stock.html">Stock</a></li>
+                    </ul>
+                    <button id="admin-btn" class="btn btn-outline-danger">Admin</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Current Sale Section -->
+            <div class="col-md-6">
+                <div class="current-sale">
+                    <h3>Current Sale</h3>
+                    <ul id="sale-items" class="list-group mb-3"></ul>
+                    <p>Sub-total: <span id="sub-total">$0.00</span></p>
+                    <p>Tax (NZ GST): <span id="tax">$0.00</span></p>
+                    <p><b>TOTAL: <span id="total">$0.00</span></b></p>
+                    <!-- Customer ID Input -->
+                    <div class="customer-id mb-2">
+                        <label for="customer-id-input">Customer ID:</label>
+                        <input type="text" id="customer-id-input" class="form-control" placeholder="Enter Customer ID">
+                    </div>
+                    <!-- Save Receipt Button -->
+                    <button id="save-receipt-button" class="btn btn-primary">Save & Print Receipt</button>
+                </div>
+            </div>
+
+            <!-- Categories Section -->
+            <div class="col-md-6">
+                <div class="categories">
+                    <h3>Categories</h3>
+                    <div class="search-bar mb-2">
+                        <input type="text" id="product-search" class="form-control" placeholder="Search product...">
+                    </div>
+                    <div class="category-buttons btn-group mb-3" role="group">
+                        <button data-category="all" class="btn btn-outline-secondary active">All</button>
+                        <button data-category="drinks" class="btn btn-outline-secondary">Drinks</button>
+                        <button data-category="cookies" class="btn btn-outline-secondary">Cookies</button>
+                        <button data-category="pastries" class="btn btn-outline-secondary">Pastries</button>
+                    </div>
+                </div>
+
+                <!-- Products Section -->
+                <div class="products">
+                    <h3>Products</h3>
+                    <div id="product-list" class="row"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const products = [
+            // Drinks Category
+            { name: 'Espresso', price: 3.80, category: 'drinks' },
+            { name: 'Long Black', price: 3.80, category: 'drinks' },
+            { name: 'Hot Chocolate', price: 3.80, category: 'drinks' },
+            { name: 'Flat White', price: 4.00, category: 'drinks' },
+            { name: 'Latte', price: 4.50, category: 'drinks' },
+            { name: 'Black Tea', price: 2.50, category: 'drinks' },
+            { name: 'Cappuccino', price: 4.00, category: 'drinks' },
+            { name: 'Chai Latte', price: 4.50, category: 'drinks' },
+            { name: 'Iced Coffee', price: 4.20, category: 'drinks' },
+
+            // Cookies Category
+            { name: 'Chocolate Chip Cookie', price: 1.50, category: 'cookies' },
+            { name: 'Oatmeal Raisin Cookie', price: 1.60, category: 'cookies' },
+            { name: 'Peanut Butter Cookie', price: 1.70, category: 'cookies' },
+            { name: 'Double Chocolate Cookie', price: 1.80, category: 'cookies' },
+
+            // Pastries Category
+            { name: 'Croissant', price: 2.50, category: 'pastries' },
+            { name: 'Danish Pastry', price: 2.80, category: 'pastries' },
+            { name: 'Cinnamon Roll', price: 3.00, category: 'pastries' },
+            { name: 'Muffin', price: 2.50, category: 'pastries' },
+            { name: 'Apple Turnover', price: 3.20, category: 'pastries' }
+        ];
+
+        let currentSale = [];
+        const taxRate = 0.15;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const productList = document.getElementById('product-list');
+            const saleItems = document.getElementById('sale-items');
+            const subTotalEl = document.getElementById('sub-total');
+            const taxEl = document.getElementById('tax');
+            const totalEl = document.getElementById('total');
+            const searchInput = document.getElementById('product-search');
+            const categoryButtons = document.querySelectorAll('.category-buttons button');
+            const customerIdInput = document.getElementById('customer-id-input');
+            const saveReceiptButton = document.getElementById('save-receipt-button');
+
+            // Function to filter products by category and search term
+            function filterProducts(category, searchTerm = '') {
+                const filteredProducts = products.filter(p => {
+                    const isCategoryMatch = category === 'all' || p.category === category;
+                    const isSearchMatch = p.name.toLowerCase().includes(searchTerm.toLowerCase());
+                    return isCategoryMatch && isSearchMatch;
+                });
+                renderProducts(filteredProducts);
+            }
+
+            // Event listeners for category buttons
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    categoryButtons.forEach(btn => btn.classList.remove('active')); // Remove active class from all
+                    button.classList.add('active'); // Add active class to the clicked button
+                    const category = button.getAttribute('data-category');
+                    const searchTerm = searchInput.value; // Get search term when category is selected
+                    filterProducts(category, searchTerm);
+                });
+            });
+
+            // Search functionality with category filtering
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value;
+                const selectedCategory = document.querySelector('.category-buttons button.active')?.getAttribute('data-category') || 'all';
+                filterProducts(selectedCategory, searchTerm);
+            });
+
+            // Render products dynamically
+            function renderProducts(productArray) {
+                productList.innerHTML = '';
+                productArray.forEach(product => {
+                    const col = document.createElement('div');
+                    col.classList.add('col-6', 'col-md-4', 'mb-3');
+                    col.innerHTML = `
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">${product.name}</h5>
+                                <p class="card-text">$${product.price.toFixed(2)}</p>
+                                <button class="btn btn-primary product-button" data-name="${product.name}">Add</button>
+                            </div>
+                        </div>
+                    `;
+                    productList.appendChild(col);
+                });
+            }
+
+            renderProducts(products);  // Initially render all products
+
+            // Add product to sale
+            productList.addEventListener('click', (e) => {
+                if (e.target.classList.contains('product-button')) {
+                    const productName = e.target.getAttribute('data-name');
+                    const product = products.find(p => p.name === productName);
+                    addToSale(product);
+                }
+            });
+
+            // Function to add product to current sale
+            function addToSale(product) {
+                currentSale.push(product);
+                updateSaleList();
+                updateTotals();
+            }
+
+            // Update sale items list
+            function updateSaleList() {
+                saleItems.innerHTML = '';
+                currentSale.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+                    listItem.textContent = item.name;
+                    listItem.innerHTML += `<span class="badge bg-primary rounded-pill">$${item.price.toFixed(2)}</span>`;
+                    saleItems.appendChild(listItem);
+                });
+            }
+
+            // Update totals
+            function updateTotals() {
+                const subTotal = currentSale.reduce((total, item) => total + item.price, 0);
+                const tax = subTotal * taxRate;
+                const total = subTotal + tax;
+
+                subTotalEl.textContent = `$${subTotal.toFixed(2)}`;
+                taxEl.textContent = `$${tax.toFixed(2)}`;
+                totalEl.textContent = `$${total.toFixed(2)}`;
+            }
+
+            // Save receipt functionality
+            saveReceiptButton.addEventListener('click', () => {
+                const customerId = customerIdInput.value || 'Customer Zero';
+                // You can implement save and print logic here
+                alert(`Receipt saved for ${customerId}!`);
+                // Reset current sale
+                currentSale = [];
+                updateSaleList();
+                updateTotals();
+                customerIdInput.value = '';
+            });
+        });
+    </script>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Ksv6My8oTqJ+ByLMjifpK7+Tq2tvp/UQXsNrtzX6XRI3EUIokPzJEDbyjccgLM7m" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor User Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        #admin-section {
+            display: none;
+        }
+        button {
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background-color: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #admin-login-button {
+            background-color: blue;
+        }
+        #back-to-user-button {
+            background-color: red;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Default Vendor User Section -->
+    <div id="user-section">
+        <h2>Loan Record</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Year/Month</th>
+                    <th>Loan Amount</th>
+                    <th>Commission %</th>
+                    <th>Total Wet</th>
+                    <th>Total Amount</th>
+                    <th>Total Loan After Minimize</th>
+                    <th>Payment Method</th>
+                    <th>Payment Method Detail</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2001</td>
+                    <td>225000</td>
+                    <td>5%</td>
+                    <td>1500</td>
+                    <td>75000</td>
+                    <td>5132</td>
+                    <td>Cash</td>
+                    <td>Cheque No</td>
+                </tr>
+                <tr>
+                    <td>2002</td>
+                    <td>300000</td>
+                    <td>6%</td>
+                    <td>1800</td>
+                    <td>90000</td>
+                    <td>6000</td>
+                    <td>Bank Transfer</td>
+                    <td>Ref No</td>
+                </tr>
+            </tbody>
+        </table>
+        <button id="admin-login-button">Login as Admin</button>
+    </div>
+
+    <!-- Admin Section -->
+    <div id="admin-section">
+        <h2>Company Name</h2>
+        <h3>Customer Data</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Zamindar Code</th>
+                    <th>Phone Number</th>
+                    <th>Total Loan</th>
+                    <th>Current Bill</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Shah Rabi</td>
+                    <td>56</td>
+                    <td>03151234567</td>
+                    <td>2225000</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Loan Details</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Year/Month</th>
+                    <th>Loan</th>
+                    <th>Commission%</th>
+                    <th>Total Wet</th>
+                    <th>Total Amount</th>
+                    <th>Product Name</th>
+                    <th>Payment Method</th>
+                    <th>Edit</th>
+                    <th>Print</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2001</td>
+                    <td>225000</td>
+                    <td>5%</td>
+                    <td>1500</td>
+                    <td>75000</td>
+                    <td>drubkin</td>
+                    <td>cash - Cheque No</td>
+                    <td><button>Edit</button></td>
+                    <td><button>Print</button></td>
+                    <td><button>Delete</button></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Button to switch back to user view -->
+        <button id="back-to-user-button">Back to User View</button>
+    </div>
+
+    <script>
+        // Function to handle admin login
+        document.getElementById("admin-login-button").addEventListener("click", function() {
+            const password = prompt("Enter admin password:");
+
+            if (password === "admin123") { // replace with your actual admin password
+                document.getElementById("user-section").style.display = "none"; // Hide user section
+                document.getElementById("admin-section").style.display = "block"; // Show admin section
+            } else {
+                alert("Incorrect password!");
+            }
+        });
+
+        // Function to handle switching back to user view
+        document.getElementById("back-to-user-button").addEventListener("click", function() {
+            document.getElementById("user-section").style.display = "block"; // Show user section
+            document.getElementById("admin-section").style.display = "none"; // Hide admin section
+        });
+    </script>
+
+</body>
+</html>
