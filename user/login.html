@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accounting Login</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0; /* Light background for the body */
+        }
+
+        /* Outer container with background image */
+        .background-container {
+            width: 100%;
+            height: 100vh; /* Full height of viewport */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('pics/school-supplies-3033204_1280.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* Login form styling with neon effect */
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            background-color: rgba(255, 255, 255, 0.1); /* Transparent background */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px 5px rgba(225, 250, 4, 0.7), /* Neon glow */
+                        0 0 30px 10px rgba(255, 0, 0, 0.5),
+                        inset 0 0 15px rgba(219, 89, 14, 0.2);
+            backdrop-filter: blur(10px); /* Blur effect to enhance neon look */
+            border: 1px solid rgba(251, 255, 4, 0.3);
+        }
+
+        .login-container h2 {
+            text-align: center;
+            color: #000000;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #000000;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.1); /* Slightly transparent input */
+            color: #000000;
+        }
+
+        .form-group input:focus {
+            border-color: #ff9900; /* Focus color matches neon */
+            outline: none;
+            box-shadow: 0 0 10px #ff9900;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #daa71c;
+            color: rgb(0, 0, 0);
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background-color: #ff8800;
+        }
+
+        .error-message {
+            color: red;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .success-message {
+            color: green;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+
+    </style>
+</head>
+<body>
+
+<div class="background-container">
+    <div class="login-container">
+        <h2>Accounting Login</h2>
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="Enter Username">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter Password">
+        </div>
+        <button class="login-btn" onclick="login()">Login</button>
+        <div id="message" class="error-message"></div>
+    </div>
+</div>
+
+<script>
+    // Array to store users
+    const users = [
+        { username: 'admin', password: '123456' },
+        { username: 'accountant', password: 'password' }
+    ];
+
+    // Login function
+    function login() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const message = document.getElementById('message');
+
+        // Check if the username and password match any user in the array
+        const user = users.find(u => u.username === username && u.password === password);
+
+        if (user) {
+            message.innerHTML = "<span class='success-message'>Login successful! Redirecting...</span>";
+            setTimeout(() => {
+                // Simulate redirection after successful login
+                window.location.href = 'index.html'; // Replace with actual dashboard page
+            }, 2000);
+        } else {
+            message.innerHTML = "Invalid username or password. Please try again.";
+        }
+    }
+</script>
+
+</body>
+</html>
